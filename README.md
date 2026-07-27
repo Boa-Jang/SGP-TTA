@@ -53,29 +53,32 @@ PyTorch 2.6.0 + CUDA 11.8
 segmentation-models-pytorch 0.3
 ```
 
-## Pre-trained model
+## Pre-trained models
 
-The source model is too large to bundle with the repository. Download it
-from Google Drive and place the `.pth` file under `model/`:
+Source-domain checkpoints are too large to bundle with the repository.
+Download them from Google Drive, create a `model/` folder at the repository
+root, and place the `.pth` file(s) inside:
 
 - [Google Drive — SGP-TTA pre-trained models](https://drive.google.com/drive/folders/1RthfZFowUyZrVSFbEcmVFuGmCqXa53VP?usp=drive_link)
 
+```bash
+mkdir -p model
+# move the downloaded DRIVE_unet.pth into ./model/
+```
+
+Expected layout after download:
 ```
 model/
-└── FIVES_unet.pth   # smp.Unet (resnet50 encoder), trained on FIVES fundus vessels
+└── DRIVE_unet.pth   # smp.Unet (resnet50 encoder), trained on DRIVE retinal vessels
 ```
 
 ## Quick start
 
-Once the checkpoint is in place, everything needed to reproduce the demo is
-in this folder:
-
-- `model/FIVES_unet.pth` — downloaded source checkpoint (see above)
-- `sample/` — example OCTA / fundus images
-
-Open [`examples.ipynb`](examples.ipynb) and run it top to bottom. It loads
-the checkpoint, runs a **Source-only** prediction on each sample, then runs
-**SGP-TTA** on the same stream and shows the two predictions side by side.
+Once the checkpoint is in `model/`, open [`examples.ipynb`](examples.ipynb)
+and run it top to bottom. It loads `model/DRIVE_unet.pth`, runs a
+**Source-only** prediction on each sample, then runs **SGP-TTA** on the
+same stream and shows the two predictions side by side. If you want to use
+a different checkpoint, edit `CHECKPOINT_PATH` at the top of the notebook.
 
 ## Usage
 
@@ -135,8 +138,9 @@ tta.reset()
 SGPTTA/
 ├── sgp_tta.py         # ProgBN + SGPTTA (the whole method)
 ├── examples.ipynb     # single-stream inference demo
-├── model/             # place downloaded checkpoint here (see Pre-trained model)
-│   └── FIVES_unet.pth
+├── model/             # place downloaded checkpoint(s) here (see Pre-trained models)
+│   └── DRIVE_unet.pth
+
 ├── sample/            # example target-domain images
 ├── overview.png
 ├── requirements.txt
