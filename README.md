@@ -49,7 +49,7 @@ pip install -r requirements.txt
 Tested with:
 ```
 Python 3.9
-PyTorch 2.6.0 + CUDA 11.8
+PyTorch 2.6.0 + CUDA 12.2
 segmentation-models-pytorch 0.3
 ```
 
