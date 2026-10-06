@@ -59,7 +59,7 @@ Source-domain checkpoints are too large to bundle with the repository.
 Download them from Google Drive, create a `model/` folder at the repository
 root, and place the `.pth` file(s) inside:
 
-- [Google Drive — SGP-TTA pre-trained models](https://drive.google.com/drive/folders/1RthfZFowUyZrVSFbEcmVFuGmCqXa53VP?usp=drive_link)
+- [Google Drive — SGP-TTA pre-trained models](https://drive.google.com/drive/folders/1QS-IQ3GwHPEJgSvr_lJzYCkiFbkuqFcn?usp=drive_link)
 
 ```bash
 mkdir -p model
@@ -74,11 +74,51 @@ model/
 
 ## Quick start
 
-Once the checkpoint is in `model/`, open [`examples.ipynb`](examples.ipynb)
-and run it top to bottom. It loads `model/DRIVE_unet.pth`, runs a
-**Source-only** prediction on each sample, then runs **SGP-TTA** on the
-same stream and shows the two predictions side by side. If you want to use
-a different checkpoint, edit `CHECKPOINT_PATH` at the top of the notebook.
+Once the checkpoint is in `model/`, there are two equivalent entry
+points — both load `model/DRIVE_unet.pth`, run a **Source-only**
+prediction on each sample in `sample/`, then run **SGP-TTA** on the same
+stream and compare the two predictions side by side.
+
+**Notebook** — exploratory, inline figures:
+
+```bash
+jupyter lab notebook/examples.ipynb
+```
+
+Run top to bottom. The notebook auto-detects the repo root, so it works
+whether you launch Jupyter from the repository root or from `notebook/`.
+Edit the config cell to point to a different checkpoint or sample
+directory.
+
+**Command-line script** — one shot, writes figures to disk:
+
+```bash
+# from the repository root
+python script/inference.py
+```
+
+By default the script loads `model/DRIVE_unet.pth`, runs on every PNG in
+`sample/`, and saves a 5-panel comparison figure (`Input | Source prob. |
+Source mask | SGP-TTA prob. | SGP-TTA mask`) per image under
+`outputs/`.
+
+Common overrides:
+
+```bash
+# different checkpoint / sample directory / output directory
+python script/inference.py \
+    --checkpoint model/other.pth \
+    --sample-dir path/to/images \
+    --out-dir    runs/other
+
+# tune the ProgBN warmup and SGP-TTA step
+python script/inference.py --tau 1.0 --num-steps 2 --lr 5e-4
+
+# disable the 1 - x RGB inversion
+python script/inference.py --no-invert
+```
+
+Run `python script/inference.py --help` for the full flag list.
 
 ## Usage
 
@@ -136,12 +176,14 @@ tta.reset()
 
 ```
 SGPTTA/
-├── sgp_tta.py         # ProgBN + SGPTTA (the whole method)
-├── examples.ipynb     # single-stream inference demo
-├── model/             # place downloaded checkpoint(s) here (see Pre-trained models)
+├── sgp_tta.py              # ProgBN + SGPTTA (the whole method)
+├── script/
+│   └── inference.py        # CLI: Source vs SGP-TTA on sample/, saves panels
+├── notebook/
+│   └── examples.ipynb      # same demo as a notebook (inline figures)
+├── model/                  # downloaded checkpoints go here (gitignored)
 │   └── DRIVE_unet.pth
-
-├── sample/            # example target-domain images
+├── sample/                 # example target-domain images
 ├── overview.png
 ├── requirements.txt
 ├── LICENSE
