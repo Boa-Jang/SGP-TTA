@@ -18,6 +18,9 @@ Thumbs.db
 # Pre-trained models (download from Google Drive; see README)
 model/
 
+# Inference outputs from script/inference.py
+outputs/
+
 # Weights / large binaries
 *.pth
 *.pt
