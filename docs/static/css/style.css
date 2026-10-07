@@ -44,11 +44,10 @@ h1.title, h2.title, h3.title, h4.title, h5.title {
 
 .publication-authors a {
   color: var(--text-strong);
-  border-bottom: 1px dotted var(--text-muted);
+  text-decoration: none;
 }
 .publication-authors a:hover {
   color: var(--accent);
-  border-bottom-color: var(--accent);
 }
 
 .publication-venue {
