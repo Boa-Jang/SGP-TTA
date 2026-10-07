@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SGP-TTA — Skeleton-Guided Progressive Test-Time Adaptation</title>
-  <meta name="description" content="SGP-TTA is a single-image test-time adaptation wrapper for tubular-structure segmentation networks (retinal vessels, OCTA microvasculature, roads).">
+  <title>SGP-TTA — Skeleton-Guided Progressive Test-Time Adaptation for Thin Curvilinear Structures</title>
+  <meta name="description" content="Skeleton-Guided Progressive Test-Time Adaptation (SGP-TTA) adapts a segmentation network at test time, image by image, to preserve the topology of thin curvilinear structures under severe domain shifts.">
 
   <!-- Open Graph / Twitter -->
   <meta property="og:title" content="SGP-TTA">
-  <meta property="og:description" content="Skeleton-Guided Progressive Test-Time Adaptation for Tubular-Structure Segmentation.">
+  <meta property="og:description" content="Skeleton-Guided Progressive Test-Time Adaptation for Thin Curvilinear Structures.">
   <meta property="og:type" content="website">
   <meta property="og:image" content="static/images/overview.png">
   <meta name="twitter:card" content="summary_large_image">
@@ -30,9 +30,6 @@
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
           onload='renderMathInElement(document.body, {delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false}]});'></script>
-  <!-- img-comparison-slider -->
-  <script type="module" src="https://unpkg.com/img-comparison-slider@8/dist/index.js"></script>
-  <link rel="stylesheet" href="https://unpkg.com/img-comparison-slider@8/dist/styles.css">
 
   <link rel="stylesheet" href="static/css/style.css">
 </head>
@@ -47,13 +44,13 @@
         <div class="column has-text-centered">
 
           <h1 class="title is-size-2-desktop is-size-3-touch publication-title">
-            SGP-TTA: Skeleton-Guided Progressive<br>
-            Test-Time Adaptation for Tubular-Structure Segmentation
+            SGP-TTA: Skeleton-Guided Progressive Test-Time<br>
+            Adaptation for Thin Curvilinear Structures
           </h1>
 
           <div class="is-size-5 publication-authors">
-            <span class="author-block"><a href="#">Boa Jang</a><sup>1,2</sup>,</span>
-            <span class="author-block"><a href="#">JunGyu Lee</a><sup>3</sup>,</span>
+            <span class="author-block"><a href="#">Boa Jang</a><sup>1,2,&dagger;</sup>,</span>
+            <span class="author-block"><a href="#">JunGyu Lee</a><sup>3,&dagger;</sup>,</span>
             <span class="author-block"><a href="#">Gwanho Lee</a><sup>4</sup>,</span>
             <span class="author-block"><a href="#">Jinwook Choi</a><sup>1,2</sup>,</span>
             <span class="author-block"><a href="#">Young-Gon Kim</a><sup>2,*</sup></span>
@@ -67,36 +64,33 @@
           </div>
 
           <div class="is-size-7 has-text-grey mt-1">
+            <sup>&dagger;</sup>Equal contribution &nbsp;&middot;&nbsp;
             <sup>*</sup>Corresponding author
           </div>
 
           <div class="is-size-6 has-text-weight-medium publication-venue mt-3">
-            Preprint, 2026
+            Preprint, 2026 &middot; Under review
           </div>
 
           <div class="publication-links mt-4">
-            <!-- Paper -->
             <span class="link-block">
               <a href="#" class="external-link button is-rounded is-dark">
                 <span class="icon"><i class="fas fa-file-pdf"></i></span>
                 <span>Paper</span>
               </a>
             </span>
-            <!-- arXiv -->
             <span class="link-block">
               <a href="#" class="external-link button is-rounded is-dark">
                 <span class="icon"><i class="ai ai-arxiv"></i></span>
                 <span>arXiv</span>
               </a>
             </span>
-            <!-- Code -->
             <span class="link-block">
-              <a href="https://github.com/" class="external-link button is-rounded is-dark">
+              <a href="https://github.com/Boa-Jang/SGPTTA" class="external-link button is-rounded is-dark">
                 <span class="icon"><i class="fab fa-github"></i></span>
                 <span>Code</span>
               </a>
             </span>
-            <!-- Pre-trained weights -->
             <span class="link-block">
               <a href="https://drive.google.com/drive/folders/1QS-IQ3GwHPEJgSvr_lJzYCkiFbkuqFcn?usp=drive_link"
                  class="external-link button is-rounded is-dark">
@@ -120,9 +114,13 @@
       <img src="static/images/overview.png" alt="SGP-TTA overview">
     </figure>
     <p class="caption">
-      <strong>SGP-TTA</strong> wraps a trained segmentation network with
-      <em>Progressive BN</em> and a <em>skeleton-guided</em> objective,
-      adapting per image without labels.
+      <strong>Overview of SGP-TTA.</strong> A source-trained network
+      with frozen convolutions adapts only at its BN layers, through
+      two complementary mechanisms. <strong>ProgBN</strong> blends
+      frozen source and current target statistics under a sample-count
+      schedule, without gradient updates; <strong>CSR</strong> recalls
+      the skeleton of the multi-view consensus map and updates only
+      the BN affine parameters.
     </p>
   </div>
 </section>
@@ -135,28 +133,59 @@
       <div class="column is-four-fifths">
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
-          <!-- TODO: paste the final abstract from the paper here. -->
           <p>
-            Tubular structures — retinal vessels, OCTA microvasculature,
-            roads in aerial imagery — share a thin, elongated topology
-            that collapses under distribution shift. We present
-            <strong>SGP-TTA</strong>, a single-image test-time
-            adaptation wrapper for segmentation networks that preserves
-            this topology without any target labels and without touching
-            the training pipeline. Our method combines
-            <strong>Progressive Batch Normalization (ProgBN)</strong>, a
-            square-root schedule that blends source running statistics
-            with target-batch statistics as more target images arrive,
-            with a <strong>Skeleton-Guided</strong> objective that
-            anchors multi-view consensus predictions to their shared
-            skeletal centerline. Only the BN affine parameters are
-            updated. Across retinal-vessel, OCTA, and aerial-road
-            benchmarks, SGP-TTA improves Dice and clDice over strong
-            TTA baselines while keeping thin branches intact.
+            Accurate segmentation of thin curvilinear structures is
+            vital for various real-world applications, from vessel
+            analysis to road extraction. Yet their intricate geometry
+            makes even minor pixel-wise errors enough to break the
+            global topology, and this structural fragility turns severe
+            domain shifts into catastrophic failures. The difficulty is
+            most acute under <strong>cross-modality gaps</strong>, where
+            the imaging process itself differs fundamentally between
+            source and target. While test-time adaptation (TTA) offers
+            a practical source-free remedy, existing methods adapt
+            feature statistics and confidence &mdash; neither of which
+            constrains connectivity &mdash; and thus degrade under
+            such extreme gaps. To address this, we propose
+            <strong>Skeleton-Guided Progressive Test-Time Adaptation
+            (SGP-TTA)</strong>.
+            <strong>Progressive Batch Normalization (ProgBN)</strong>
+            shifts normalization from frozen source statistics toward
+            current target estimates under a sample-count schedule, so
+            that the source&ndash;target balance follows the stage of
+            adaptation rather than a fixed coefficient.
+            <strong>Consensus Skeleton Recall (CSR)</strong> then
+            derives a structural target from geometrically aligned
+            multi-view predictions and updates only the BN affine
+            parameters to preserve connected structures. Extensive
+            experiments show that SGP-TTA consistently outperforms
+            existing TTA methods in topological connectivity, with the
+            largest margins under cross-modality shift.
           </p>
         </div>
       </div>
     </div>
+  </div>
+</section>
+
+
+<!-- ============================================================ Motivation ===== -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Why cross-modality matters</h2>
+    <figure class="image method-figure">
+      <img src="static/images/datasets.png" alt="Curvilinear datasets and their domain characteristics">
+    </figure>
+    <p class="caption">
+      <strong>Representative curvilinear-structure datasets and their
+      domain characteristics.</strong> (a) Color fundus photography
+      (CFP), fluorescein angiography (FA), OCT angiography (OCTA), and
+      aerial road datasets share the same underlying topology but
+      differ sharply in appearance. (b) t-SNE of batch-normalization
+      statistics; colors denote datasets, marker shapes denote imaging
+      domains. Modality clusters are well separated &mdash; which is
+      exactly why source-only models collapse under modality transfer.
+    </p>
   </div>
 </section>
 
@@ -166,71 +195,65 @@
   <div class="container is-max-desktop">
     <h2 class="title is-3 has-text-centered">Method</h2>
 
-    <div class="columns is-vcentered mt-4">
-      <div class="column is-half">
-        <h3 class="title is-5">1. Progressive Batch Normalization (ProgBN)</h3>
-        <div class="content has-text-justified">
-          <p>
-            Every <code>nn.BatchNorm2d</code> in the source model is
-            replaced by a layer that blends the frozen source running
-            statistics with the current-batch target statistics using a
-            monotonic square-root warmup over the target-sample counter
-            <code>n</code>:
-          </p>
-          <p class="has-text-centered">
-            $$\alpha_n \;=\; \frac{\sqrt{n}}{\sqrt{n} + \tau}, \qquad
-              \mu \;=\; \alpha_n\,\mu_{\text{tgt}} + (1-\alpha_n)\,\mu_{\text{src}}$$
-          </p>
-          <p>
-            Small <code>&tau;</code> warms up quickly; large
-            <code>&tau;</code> stays anchored to source statistics for
-            longer. The running buffers themselves are never written to.
-          </p>
-        </div>
-      </div>
-      <div class="column is-half">
-        <!-- TODO: swap for a ProgBN schedule figure if available -->
-        <figure class="image method-figure">
-          <img src="static/images/overview.png" alt="ProgBN schedule">
-        </figure>
-      </div>
+    <div class="content mt-5">
+      <h3 class="title is-5">1. Progressive Batch Normalization (ProgBN)</h3>
+      <p>
+        The affine parameters of each BN layer remain calibrated to
+        source-normalized features. Replacing the source statistics
+        immediately therefore destabilizes early predictions, while a
+        fixed source-heavy mixture becomes increasingly conservative
+        after the affine parameters have adapted. ProgBN resolves this
+        <em>stage-dependent trade-off</em> by progressively increasing
+        its reliance on the target statistics as the stream proceeds.
+      </p>
+      <p class="has-text-centered">
+        $$\tilde\mu_n = \alpha(n)\,\mu_t(x_n) + \bigl(1-\alpha(n)\bigr)\,\mu_s,
+          \quad
+          \tilde\sigma^2_n = \alpha(n)\,\sigma^2_t(x_n) + \bigl(1-\alpha(n)\bigr)\,\sigma^2_s$$
+      </p>
+      <p>
+        where the mixing coefficient follows a bounded square-root
+        schedule in the target-sample count&nbsp;<em>n</em>:
+      </p>
+      <p class="has-text-centered">
+        $$\alpha(n) = \frac{\sqrt{n}}{\sqrt{n} + \tau}$$
+      </p>
+      <p>
+        The schedule is monotonically increasing and label-free. The
+        source statistics act as a prior worth <em>&tau;</em> units of
+        adaptation progress, giving <em>&tau;</em> a concrete
+        pseudo-count reading rather than an opaque tuning constant;
+        the half-transition point is <em>n = &tau;<sup>2</sup></em>.
+      </p>
     </div>
 
-    <div class="columns is-vcentered mt-5">
-      <div class="column is-half">
-        <!-- TODO: swap for a CSR / consensus skeleton figure if available -->
-        <figure class="image method-figure">
-          <img src="static/images/overview.png" alt="Consensus skeleton recall">
-        </figure>
-      </div>
-      <div class="column is-half">
-        <h3 class="title is-5">2. Skeleton-Guided Objective</h3>
-        <div class="content has-text-justified">
-          <p>
-            For each incoming image we form six augmented views
-            (identity, two flips, three 90&deg; rotations), average
-            their per-view predictions into a
-            <strong>Multi-View Consensus</strong> map, and update
-            <em>only</em> the BN affine parameters with two losses:
-          </p>
-          <ul>
-            <li>
-              <strong>Consensus entropy</strong> on the mean prediction.
-            </li>
-            <li>
-              <strong>Consensus Skeleton Recall (CSR):</strong>
-              skeletonize the binarized consensus, dilate it into a thin
-              tube, and penalize <code>1 &minus; recall</code> of each
-              view's probability against that tube.
-            </li>
-          </ul>
-          <p>
-            CSR anchors the network to the structural centerline, so
-            thin branches survive the entropy pressure toward confident
-            predictions.
-          </p>
-        </div>
-      </div>
+    <div class="content mt-6">
+      <h3 class="title is-5">2. Consensus Skeleton Recall (CSR)</h3>
+      <p>
+        ProgBN recalibrates feature statistics but does not constrain
+        the spatial connectivity of thin structures. CSR derives a
+        self-supervised structural target from prediction agreement
+        across <em>K</em> geometric views (identity, two flips, three
+        90&deg; rotations). After mapping each view's prediction back to
+        the original coordinate frame, we form a Multi-View Consensus
+        map&nbsp;$\bar p_n$, binarize it, skeletonize it, and dilate it
+        into a tube&nbsp;$\tilde s_n$.
+      </p>
+      <p>
+        CSR then encourages each aligned view to cover the
+        consensus-supported skeleton:
+      </p>
+      <p class="has-text-centered">
+        $$\mathcal{L}_{\text{CSR}} = 1 - \frac{1}{K}\sum_{k=1}^{K}
+          \frac{\sum_i \tilde s_{n,i}\, p^{(k)}_{n,i}}
+               {\sum_i \tilde s_{n,i} + \varepsilon}$$
+      </p>
+      <p>
+        Combined with a pixel-wise entropy term on&nbsp;$\bar p_n$, a
+        single Adam step per image updates only the BN affine
+        parameters&nbsp;($\gamma, \beta$). All non-BN weights and the
+        source running statistics stay frozen.
+      </p>
     </div>
   </div>
 </section>
@@ -240,73 +263,220 @@
 <section class="section">
   <div class="container is-max-desktop">
     <h2 class="title is-3 has-text-centered">Qualitative Results</h2>
-    <p class="has-text-centered has-text-grey mb-5">
-      Drag the slider to compare <strong>Source-only</strong> (left) with
-      <strong>SGP-TTA</strong> (right) on each target domain.
+    <figure class="image method-figure">
+      <img src="static/images/qualitative.png" alt="Qualitative comparison across target domains">
+    </figure>
+    <p class="caption">
+      <strong>Qualitative comparison across diverse target domains.</strong>
+      Red boxes highlight restored continuity of fine vessel structures
+      and reduced false negatives in SGP-TTA (<em>Ours</em>) compared
+      with the source model and competing TTA baselines.
     </p>
-
-    <!--
-      Place the following overlay images under static/images/results/:
-          drive_source.png   drive_sgptta.png
-          octa_source.png    octa_sgptta.png
-          stare_source.png   stare_sgptta.png
-      Each image should be the same crop (RGB input with the predicted
-      vessel mask overlaid in a single color) so the slider aligns.
-    -->
-    <div class="columns is-multiline">
-      <div class="column is-one-third">
-        <h4 class="title is-6 has-text-centered">DRIVE &rarr; DRIVE</h4>
-        <img-comparison-slider class="comparison">
-          <img slot="first"  src="static/images/results/drive_source.png"  alt="Source on DRIVE">
-          <img slot="second" src="static/images/results/drive_sgptta.png"  alt="SGP-TTA on DRIVE">
-        </img-comparison-slider>
-      </div>
-      <div class="column is-one-third">
-        <h4 class="title is-6 has-text-centered">DRIVE &rarr; OCTA</h4>
-        <img-comparison-slider class="comparison">
-          <img slot="first"  src="static/images/results/octa_source.png"   alt="Source on OCTA">
-          <img slot="second" src="static/images/results/octa_sgptta.png"   alt="SGP-TTA on OCTA">
-        </img-comparison-slider>
-      </div>
-      <div class="column is-one-third">
-        <h4 class="title is-6 has-text-centered">DRIVE &rarr; STARE</h4>
-        <img-comparison-slider class="comparison">
-          <img slot="first"  src="static/images/results/stare_source.png"  alt="Source on STARE">
-          <img slot="second" src="static/images/results/stare_sgptta.png"  alt="SGP-TTA on STARE">
-        </img-comparison-slider>
-      </div>
-    </div>
   </div>
 </section>
 
 
-<!-- ============================================================ Quantitative Results (placeholder) ===== -->
+<!-- ============================================================ Quantitative Results ===== -->
 <section class="section">
   <div class="container is-max-desktop">
     <h2 class="title is-3 has-text-centered">Quantitative Results</h2>
-    <p class="has-text-centered has-text-grey mb-4">
-      Dice (%) and clDice (%) on three target domains, averaged over
-      images. Higher is better.
+    <p class="has-text-centered has-text-grey mb-5">
+      Dice (%) and clDice (%) across three distribution-shift regimes.
+      Higher is better. <strong>Best</strong> and <u>second-best</u>
+      per column.
     </p>
 
-    <!-- TODO: replace with your real numbers; keep clDice bolded if it is the headline metric -->
+    <h3 class="title is-5 mt-5">Within-modality retinal transfer</h3>
     <div class="table-container">
-      <table class="table is-striped is-hoverable is-fullwidth has-text-centered">
+      <table class="table is-striped is-hoverable is-fullwidth is-narrow has-text-centered results-table">
         <thead>
           <tr>
-            <th>Target</th>
-            <th>Source-only</th>
-            <th>TENT</th>
-            <th>CoTTA</th>
-            <th>SGP-TTA (ours)</th>
+            <th class="has-text-left">Method</th>
+            <th colspan="2">DRIVE &rarr; STARE</th>
+            <th colspan="2">DRIVE &rarr; CHASEDB</th>
+            <th colspan="2">OCTA3mm &rarr; ROSE1</th>
+            <th colspan="2">OCTA6mm &rarr; ROSE1</th>
+            <th colspan="2">ROSE1 &rarr; OCTA3mm</th>
+            <th colspan="2">ROSE1 &rarr; OCTA6mm</th>
+          </tr>
+          <tr class="metric-row">
+            <th></th>
+            <th>Dice</th><th>clDice</th>
+            <th>Dice</th><th>clDice</th>
+            <th>Dice</th><th>clDice</th>
+            <th>Dice</th><th>clDice</th>
+            <th>Dice</th><th>clDice</th>
+            <th>Dice</th><th>clDice</th>
           </tr>
         </thead>
         <tbody>
-          <tr><td>DRIVE</td>  <td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td class="has-text-weight-bold">&mdash;</td></tr>
-          <tr><td>OCTA</td>   <td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td class="has-text-weight-bold">&mdash;</td></tr>
-          <tr><td>STARE</td>  <td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td class="has-text-weight-bold">&mdash;</td></tr>
+          <tr><td class="has-text-left">Source</td><td>51.32</td><td>48.55</td><td>37.08</td><td>38.95</td><td>47.47</td><td>41.75</td><td>56.49</td><td>49.72</td><td>59.76</td><td>64.22</td><td>68.92</td><td>80.51</td></tr>
+          <tr><td class="has-text-left">TENT</td><td>70.96</td><td>68.66</td><td>71.60</td><td>73.51</td><td>48.47</td><td>41.65</td><td>53.77</td><td>48.79</td><td><u>63.17</u></td><td><u>66.07</u></td><td><u>71.71</u></td><td><u>80.89</u></td></tr>
+          <tr><td class="has-text-left">CoTTA</td><td>71.67</td><td>69.66</td><td>71.27</td><td>73.43</td><td>47.54</td><td>42.75</td><td>53.94</td><td>48.95</td><td>62.26</td><td>64.52</td><td>71.41</td><td>80.30</td></tr>
+          <tr><td class="has-text-left">SAR</td><td>70.96</td><td>68.69</td><td>71.37</td><td>73.22</td><td>48.55</td><td>41.73</td><td>53.84</td><td>48.87</td><td>62.17</td><td>64.44</td><td>71.36</td><td>80.26</td></tr>
+          <tr><td class="has-text-left">EATA</td><td>71.06</td><td>68.78</td><td>71.61</td><td>73.56</td><td>48.57</td><td>43.73</td><td>53.87</td><td>49.79</td><td>62.44</td><td>65.05</td><td>71.42</td><td>80.60</td></tr>
+          <tr><td class="has-text-left">MedBN</td><td>70.26</td><td>68.15</td><td>70.13</td><td>71.33</td><td><u>50.19</u></td><td><u>43.89</u></td><td><u>56.54</u></td><td><u>51.81</u></td><td>49.86</td><td>50.83</td><td>61.76</td><td>71.54</td></tr>
+          <tr><td class="has-text-left">VPTTA</td><td>70.92</td><td>68.03</td><td>71.33</td><td>73.47</td><td>49.23</td><td>42.75</td><td>56.05</td><td>51.06</td><td>54.43</td><td>55.75</td><td>67.97</td><td>78.44</td></tr>
+          <tr><td class="has-text-left">GraTa</td><td>70.96</td><td>68.69</td><td>71.41</td><td>73.26</td><td>48.56</td><td>41.74</td><td>53.85</td><td>48.89</td><td>62.37</td><td>64.66</td><td>71.44</td><td>80.33</td></tr>
+          <tr><td class="has-text-left">TopoTTA</td><td><u>71.98</u></td><td><u>70.66</u></td><td><u>71.70</u></td><td><u>76.12</u></td><td>49.44</td><td>43.35</td><td>55.15</td><td>48.57</td><td>62.18</td><td>65.55</td><td>65.76</td><td>79.23</td></tr>
+          <tr class="ours-row">
+            <td class="has-text-left"><strong>SGP-TTA (Ours)</strong></td>
+            <td><strong>74.17</strong></td><td><strong>71.36</strong></td>
+            <td><strong>73.79</strong></td><td><strong>78.30</strong></td>
+            <td><strong>58.72</strong></td><td><strong>52.02</strong></td>
+            <td><strong>62.71</strong></td><td><strong>58.41</strong></td>
+            <td><strong>63.55</strong></td><td><strong>66.30</strong></td>
+            <td><strong>72.56</strong></td><td><strong>81.95</strong></td>
+          </tr>
         </tbody>
       </table>
+    </div>
+
+    <h3 class="title is-5 mt-6">Cross-modality retinal transfer</h3>
+    <div class="table-container">
+      <table class="table is-striped is-hoverable is-fullwidth is-narrow has-text-centered results-table">
+        <thead>
+          <tr>
+            <th class="has-text-left">Method</th>
+            <th colspan="2">DRIVE &rarr; FA19</th>
+            <th colspan="2">DRIVE &rarr; OCTA3mm</th>
+            <th colspan="2">DRIVE &rarr; OCTA6mm</th>
+            <th colspan="2">DRIVE &rarr; ROSE1</th>
+          </tr>
+          <tr class="metric-row">
+            <th></th>
+            <th>Dice</th><th>clDice</th>
+            <th>Dice</th><th>clDice</th>
+            <th>Dice</th><th>clDice</th>
+            <th>Dice</th><th>clDice</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="has-text-left">Source</td><td>40.75</td><td>40.09</td><td>25.84</td><td>24.39</td><td>37.92</td><td>36.60</td><td>46.35</td><td>44.31</td></tr>
+          <tr><td class="has-text-left">TENT</td><td>41.58</td><td>41.84</td><td>30.14</td><td>33.90</td><td>54.67</td><td><u>63.02</u></td><td>40.74</td><td>42.12</td></tr>
+          <tr><td class="has-text-left">CoTTA</td><td>41.42</td><td>41.92</td><td>29.48</td><td>33.07</td><td>52.64</td><td>60.59</td><td>40.62</td><td>42.03</td></tr>
+          <tr><td class="has-text-left">SAR</td><td>42.61</td><td>42.89</td><td>29.58</td><td>33.50</td><td>53.42</td><td>61.37</td><td>41.63</td><td>43.25</td></tr>
+          <tr><td class="has-text-left">EATA</td><td>41.60</td><td>41.88</td><td>30.49</td><td><u>34.01</u></td><td><u>54.91</u></td><td>62.98</td><td>40.80</td><td>42.18</td></tr>
+          <tr><td class="has-text-left">MedBN</td><td>39.97</td><td>41.18</td><td>27.08</td><td>29.60</td><td>48.62</td><td>54.90</td><td>41.86</td><td>43.00</td></tr>
+          <tr><td class="has-text-left">VPTTA</td><td><u>44.79</u></td><td><u>45.08</u></td><td><u>32.50</u></td><td>33.91</td><td><u>55.13</u></td><td>59.38</td><td>44.30</td><td>44.90</td></tr>
+          <tr><td class="has-text-left">GraTa</td><td>41.62</td><td>41.89</td><td>29.48</td><td>33.10</td><td>52.88</td><td>60.90</td><td>40.64</td><td>42.03</td></tr>
+          <tr><td class="has-text-left">TopoTTA</td><td>43.85</td><td>44.01</td><td>24.18</td><td>23.33</td><td>35.51</td><td>35.36</td><td><u>46.68</u></td><td><u>47.04</u></td></tr>
+          <tr class="ours-row">
+            <td class="has-text-left"><strong>SGP-TTA (Ours)</strong></td>
+            <td><strong>47.53</strong></td><td><strong>49.65</strong></td>
+            <td><strong>44.83</strong></td><td><strong>46.41</strong></td>
+            <td><strong>59.62</strong></td><td><strong>69.71</strong></td>
+            <td><strong>53.95</strong></td><td><strong>51.16</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="title is-5 mt-6">Cross-dataset road transfer</h3>
+    <div class="table-container">
+      <table class="table is-striped is-hoverable is-fullwidth is-narrow has-text-centered results-table">
+        <thead>
+          <tr>
+            <th class="has-text-left">Method</th>
+            <th colspan="2">DeepGlobe &rarr; MR</th>
+            <th colspan="2">DeepGlobe &rarr; CNDS</th>
+          </tr>
+          <tr class="metric-row">
+            <th></th>
+            <th>Dice</th><th>clDice</th>
+            <th>Dice</th><th>clDice</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="has-text-left">Source</td><td>37.23</td><td>44.94</td><td><strong>85.56</strong></td><td><u>93.39</u></td></tr>
+          <tr><td class="has-text-left">TENT</td><td>37.18</td><td>46.05</td><td>62.67</td><td>77.06</td></tr>
+          <tr><td class="has-text-left">CoTTA</td><td>37.35</td><td>46.32</td><td>62.91</td><td>77.20</td></tr>
+          <tr><td class="has-text-left">SAR</td><td>37.35</td><td>46.30</td><td>62.94</td><td>77.22</td></tr>
+          <tr><td class="has-text-left">EATA</td><td>37.26</td><td>46.28</td><td>63.11</td><td>77.41</td></tr>
+          <tr><td class="has-text-left">MedBN</td><td>35.27</td><td>42.64</td><td>67.26</td><td>82.41</td></tr>
+          <tr><td class="has-text-left">VPTTA</td><td>37.67</td><td>46.85</td><td>71.52</td><td>84.63</td></tr>
+          <tr><td class="has-text-left">GraTa</td><td>37.40</td><td>46.38</td><td>63.00</td><td>77.30</td></tr>
+          <tr><td class="has-text-left">TopoTTA</td><td><strong>42.24</strong></td><td><u>53.51</u></td><td>83.03</td><td>91.28</td></tr>
+          <tr class="ours-row">
+            <td class="has-text-left"><strong>SGP-TTA (Ours)</strong></td>
+            <td><u>40.80</u></td><td><strong>54.84</strong></td>
+            <td><u>85.27</u></td><td><strong>94.30</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="has-text-grey mt-4 is-size-7">
+      SGP-TTA achieves the highest clDice in <strong>all 12 transfer
+      settings</strong> and the highest Dice in 10 of 12. Gains are
+      largest under cross-modality shifts (Table 2), where several
+      existing TTA methods degrade below the source model.
+    </p>
+  </div>
+</section>
+
+
+<!-- ============================================================ Analysis ===== -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Analysis</h2>
+
+    <div class="columns is-vcentered mt-5">
+      <div class="column is-half">
+        <figure class="image method-figure">
+          <img src="static/images/alpha_schedule.png" alt="Effect of the alpha schedule over the target stream">
+        </figure>
+      </div>
+      <div class="column is-half content">
+        <h3 class="title is-5">The right source&ndash;target balance shifts over time</h3>
+        <p>
+          No fixed source&ndash;target coefficient wins throughout the
+          stream. Source-heavy normalization leads early;
+          target-heavy normalization starts lowest and only overtakes
+          later. The square-root schedule used by ProgBN gives the
+          largest improvement at <em>every</em> point of the stream,
+          directly supporting the stage-dependent view.
+        </p>
+      </div>
+    </div>
+
+    <div class="columns is-vcentered mt-6">
+      <div class="column is-half content">
+        <h3 class="title is-5">Robust across BN-based architectures</h3>
+        <p>
+          SGP-TTA is the outermost method on <em>every</em> axis of
+          UNet, UNet++, MaNet, LinkNet, and FPN, averaged across all
+          transfer settings. The method operates purely on BN layers,
+          so the gain does not rest on a particular decoder design
+          &mdash; and, by the same token, the claim is scoped to
+          normalization-based networks.
+        </p>
+      </div>
+      <div class="column is-half">
+        <figure class="image method-figure">
+          <img src="static/images/architectures.png" alt="Robustness across segmentation architectures">
+        </figure>
+      </div>
+    </div>
+
+    <div class="columns is-vcentered mt-6">
+      <div class="column is-half">
+        <figure class="image method-figure">
+          <img src="static/images/cost.png" alt="clDice vs adaptation cost">
+        </figure>
+      </div>
+      <div class="column is-half content">
+        <h3 class="title is-5">Headline clDice at reasonable cost</h3>
+        <p>
+          SGP-TTA is slower than the entropy-driven baselines because
+          it runs multiple views and a skeletonization step per image,
+          but still sits well below the most expensive compared method
+          (CoTTA) while attaining the highest clDice. Entropy-driven
+          methods cluster near the same clDice regardless of whether
+          they update only BN affine parameters or the whole network
+          &mdash; the limit is the objective, not the compute.
+        </p>
+      </div>
     </div>
   </div>
 </section>
@@ -316,10 +486,11 @@
 <section class="section" id="BibTeX">
   <div class="container is-max-desktop content">
     <h2 class="title is-3">BibTeX</h2>
-<pre><code>@article{sgptta2026,
-  title   = {Skeleton-Guided Progressive Test-Time Adaptation for Tubular-Structure Segmentation},
-  author  = {SGP-TTA authors},
-  year    = {2026}
+<pre><code>@article{jang2026sgptta,
+  title   = {Skeleton-Guided Progressive Test-Time Adaptation for Thin Curvilinear Structures},
+  author  = {Jang, Boa and Lee, JunGyu and Lee, Gwanho and Choi, Jinwook and Kim, Young-Gon},
+  year    = {2026},
+  note    = {Under review}
 }</code></pre>
   </div>
 </section>
@@ -333,7 +504,7 @@
         Website template adapted from
         <a href="https://nerfies.github.io/">Nerfies</a>.
         Source available on
-        <a href="https://github.com/">GitHub</a>.
+        <a href="https://github.com/Boa-Jang/SGPTTA">GitHub</a>.
       </p>
     </div>
   </div>

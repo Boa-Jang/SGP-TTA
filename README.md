@@ -1,16 +1,19 @@
 # SGP-TTA
 
-**Skeleton-Guided Progressive Test-Time Adaptation for Tubular-Structure Segmentation**
+**Skeleton-Guided Progressive Test-Time Adaptation for Thin Curvilinear Structures**
 
 <div align="center">
   <img width="100%" alt="SGP-TTA Overview" src="overview.png">
 </div>
 
-SGP-TTA is a single-image test-time adaptation (TTA) wrapper for segmentation
-networks that predict *tubular* structures — retinal vessels, OCTA
-microvasculature, roads in aerial imagery, and similar. It adapts a
-source-domain model to each incoming target-domain image without any labels
-and without touching the training pipeline.
+SGP-TTA is a single-image test-time adaptation (TTA) wrapper for
+segmentation networks that predict *thin curvilinear* structures —
+retinal vessels across modalities (color fundus, FA, OCTA), roads in
+aerial imagery, and similar. It adapts a source-domain model to each
+incoming target-domain image without any labels and without touching
+the training pipeline.
+
+**Project page:** https://boa-jang.github.io/SGPTTA/
 
 ## Method
 
@@ -195,10 +198,11 @@ SGPTTA/
 If this code is helpful for your research, please cite:
 
 ```bibtex
-@article{sgptta2026,
-  title={Skeleton-Guided Progressive Test-Time Adaptation for Tubular-Structure Segmentation},
-  author={SGP-TTA authors},
-  year={2026}
+@article{jang2026sgptta,
+  title   = {Skeleton-Guided Progressive Test-Time Adaptation for Thin Curvilinear Structures},
+  author  = {Jang, Boa and Lee, JunGyu and Lee, Gwanho and Choi, Jinwook and Kim, Young-Gon},
+  year    = {2026},
+  note    = {Under review}
 }
 ```
 

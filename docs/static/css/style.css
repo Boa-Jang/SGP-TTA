@@ -130,6 +130,30 @@ img-comparison-slider.comparison img {
   vertical-align: middle;
 }
 
+/* Results tables (quantitative comparison) */
+.results-table {
+  font-size: 0.85rem;
+}
+.results-table thead tr:first-child th {
+  border-bottom: 1px solid #d7dce6;
+}
+.results-table .metric-row th {
+  font-weight: 500;
+  color: var(--text-muted);
+  background: #fbfcff;
+}
+.results-table tbody tr.ours-row {
+  background: rgba(45, 91, 255, 0.06) !important;
+  border-top: 2px solid var(--accent);
+}
+.results-table tbody tr.ours-row td {
+  color: var(--text-strong);
+}
+.results-table u {
+  text-decoration-color: var(--text-muted);
+  text-underline-offset: 2px;
+}
+
 
 /* ============================================================ Code blocks */
 #BibTeX pre {
