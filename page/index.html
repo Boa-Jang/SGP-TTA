@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SGP-TTA — Skeleton-Guided Progressive Test-Time Adaptation</title>
+  <meta name="description" content="SGP-TTA is a single-image test-time adaptation wrapper for tubular-structure segmentation networks (retinal vessels, OCTA microvasculature, roads).">
+
+  <!-- Open Graph / Twitter -->
+  <meta property="og:title" content="SGP-TTA">
+  <meta property="og:description" content="Skeleton-Guided Progressive Test-Time Adaptation for Tubular-Structure Segmentation.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="static/images/overview.png">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#129504;</text></svg>">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Noto+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Bulma -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <!-- Academicons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.4/css/academicons.min.css">
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+          onload='renderMathInElement(document.body, {delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false}]});'></script>
+  <!-- img-comparison-slider -->
+  <script type="module" src="https://unpkg.com/img-comparison-slider@8/dist/index.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/img-comparison-slider@8/dist/styles.css">
+
+  <link rel="stylesheet" href="static/css/style.css">
+</head>
+
+<body>
+
+<!-- ============================================================ Hero ===== -->
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+
+          <h1 class="title is-size-2-desktop is-size-3-touch publication-title">
+            SGP-TTA: Skeleton-Guided Progressive<br>
+            Test-Time Adaptation for Tubular-Structure Segmentation
+          </h1>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><a href="#">Boa Jang</a><sup>1,2</sup>,</span>
+            <span class="author-block"><a href="#">JunGyu Lee</a><sup>3</sup>,</span>
+            <span class="author-block"><a href="#">Gwanho Lee</a><sup>4</sup>,</span>
+            <span class="author-block"><a href="#">Jinwook Choi</a><sup>1,2</sup>,</span>
+            <span class="author-block"><a href="#">Young-Gon Kim</a><sup>2,*</sup></span>
+          </div>
+
+          <div class="is-size-6 publication-authors mt-2">
+            <span class="author-block"><sup>1</sup>Seoul National University</span>&nbsp;
+            <span class="author-block"><sup>2</sup>Seoul National University Hospital</span>&nbsp;
+            <span class="author-block"><sup>3</sup>Yonsei University</span>&nbsp;
+            <span class="author-block"><sup>4</sup>Korea University</span>
+          </div>
+
+          <div class="is-size-7 has-text-grey mt-1">
+            <sup>*</sup>Corresponding author
+          </div>
+
+          <div class="is-size-6 has-text-weight-medium publication-venue mt-3">
+            Preprint, 2026
+          </div>
+
+          <div class="publication-links mt-4">
+            <!-- Paper -->
+            <span class="link-block">
+              <a href="#" class="external-link button is-rounded is-dark">
+                <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                <span>Paper</span>
+              </a>
+            </span>
+            <!-- arXiv -->
+            <span class="link-block">
+              <a href="#" class="external-link button is-rounded is-dark">
+                <span class="icon"><i class="ai ai-arxiv"></i></span>
+                <span>arXiv</span>
+              </a>
+            </span>
+            <!-- Code -->
+            <span class="link-block">
+              <a href="https://github.com/" class="external-link button is-rounded is-dark">
+                <span class="icon"><i class="fab fa-github"></i></span>
+                <span>Code</span>
+              </a>
+            </span>
+            <!-- Pre-trained weights -->
+            <span class="link-block">
+              <a href="https://drive.google.com/drive/folders/1QS-IQ3GwHPEJgSvr_lJzYCkiFbkuqFcn?usp=drive_link"
+                 class="external-link button is-rounded is-dark">
+                <span class="icon"><i class="fas fa-cloud-arrow-down"></i></span>
+                <span>Weights</span>
+              </a>
+            </span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================ Teaser ===== -->
+<section class="section pt-0">
+  <div class="container is-max-desktop">
+    <figure class="image teaser">
+      <img src="static/images/overview.png" alt="SGP-TTA overview">
+    </figure>
+    <p class="caption">
+      <strong>SGP-TTA</strong> wraps a trained segmentation network with
+      <em>Progressive BN</em> and a <em>skeleton-guided</em> objective,
+      adapting per image without labels.
+    </p>
+  </div>
+</section>
+
+
+<!-- ============================================================ Abstract ===== -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <!-- TODO: paste the final abstract from the paper here. -->
+          <p>
+            Tubular structures — retinal vessels, OCTA microvasculature,
+            roads in aerial imagery — share a thin, elongated topology
+            that collapses under distribution shift. We present
+            <strong>SGP-TTA</strong>, a single-image test-time
+            adaptation wrapper for segmentation networks that preserves
+            this topology without any target labels and without touching
+            the training pipeline. Our method combines
+            <strong>Progressive Batch Normalization (ProgBN)</strong>, a
+            square-root schedule that blends source running statistics
+            with target-batch statistics as more target images arrive,
+            with a <strong>Skeleton-Guided</strong> objective that
+            anchors multi-view consensus predictions to their shared
+            skeletal centerline. Only the BN affine parameters are
+            updated. Across retinal-vessel, OCTA, and aerial-road
+            benchmarks, SGP-TTA improves Dice and clDice over strong
+            TTA baselines while keeping thin branches intact.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================ Method ===== -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Method</h2>
+
+    <div class="columns is-vcentered mt-4">
+      <div class="column is-half">
+        <h3 class="title is-5">1. Progressive Batch Normalization (ProgBN)</h3>
+        <div class="content has-text-justified">
+          <p>
+            Every <code>nn.BatchNorm2d</code> in the source model is
+            replaced by a layer that blends the frozen source running
+            statistics with the current-batch target statistics using a
+            monotonic square-root warmup over the target-sample counter
+            <code>n</code>:
+          </p>
+          <p class="has-text-centered">
+            $$\alpha_n \;=\; \frac{\sqrt{n}}{\sqrt{n} + \tau}, \qquad
+              \mu \;=\; \alpha_n\,\mu_{\text{tgt}} + (1-\alpha_n)\,\mu_{\text{src}}$$
+          </p>
+          <p>
+            Small <code>&tau;</code> warms up quickly; large
+            <code>&tau;</code> stays anchored to source statistics for
+            longer. The running buffers themselves are never written to.
+          </p>
+        </div>
+      </div>
+      <div class="column is-half">
+        <!-- TODO: swap for a ProgBN schedule figure if available -->
+        <figure class="image method-figure">
+          <img src="static/images/overview.png" alt="ProgBN schedule">
+        </figure>
+      </div>
+    </div>
+
+    <div class="columns is-vcentered mt-5">
+      <div class="column is-half">
+        <!-- TODO: swap for a CSR / consensus skeleton figure if available -->
+        <figure class="image method-figure">
+          <img src="static/images/overview.png" alt="Consensus skeleton recall">
+        </figure>
+      </div>
+      <div class="column is-half">
+        <h3 class="title is-5">2. Skeleton-Guided Objective</h3>
+        <div class="content has-text-justified">
+          <p>
+            For each incoming image we form six augmented views
+            (identity, two flips, three 90&deg; rotations), average
+            their per-view predictions into a
+            <strong>Multi-View Consensus</strong> map, and update
+            <em>only</em> the BN affine parameters with two losses:
+          </p>
+          <ul>
+            <li>
+              <strong>Consensus entropy</strong> on the mean prediction.
+            </li>
+            <li>
+              <strong>Consensus Skeleton Recall (CSR):</strong>
+              skeletonize the binarized consensus, dilate it into a thin
+              tube, and penalize <code>1 &minus; recall</code> of each
+              view's probability against that tube.
+            </li>
+          </ul>
+          <p>
+            CSR anchors the network to the structural centerline, so
+            thin branches survive the entropy pressure toward confident
+            predictions.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================ Qualitative Results ===== -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Qualitative Results</h2>
+    <p class="has-text-centered has-text-grey mb-5">
+      Drag the slider to compare <strong>Source-only</strong> (left) with
+      <strong>SGP-TTA</strong> (right) on each target domain.
+    </p>
+
+    <!--
+      Place the following overlay images under static/images/results/:
+          drive_source.png   drive_sgptta.png
+          octa_source.png    octa_sgptta.png
+          stare_source.png   stare_sgptta.png
+      Each image should be the same crop (RGB input with the predicted
+      vessel mask overlaid in a single color) so the slider aligns.
+    -->
+    <div class="columns is-multiline">
+      <div class="column is-one-third">
+        <h4 class="title is-6 has-text-centered">DRIVE &rarr; DRIVE</h4>
+        <img-comparison-slider class="comparison">
+          <img slot="first"  src="static/images/results/drive_source.png"  alt="Source on DRIVE">
+          <img slot="second" src="static/images/results/drive_sgptta.png"  alt="SGP-TTA on DRIVE">
+        </img-comparison-slider>
+      </div>
+      <div class="column is-one-third">
+        <h4 class="title is-6 has-text-centered">DRIVE &rarr; OCTA</h4>
+        <img-comparison-slider class="comparison">
+          <img slot="first"  src="static/images/results/octa_source.png"   alt="Source on OCTA">
+          <img slot="second" src="static/images/results/octa_sgptta.png"   alt="SGP-TTA on OCTA">
+        </img-comparison-slider>
+      </div>
+      <div class="column is-one-third">
+        <h4 class="title is-6 has-text-centered">DRIVE &rarr; STARE</h4>
+        <img-comparison-slider class="comparison">
+          <img slot="first"  src="static/images/results/stare_source.png"  alt="Source on STARE">
+          <img slot="second" src="static/images/results/stare_sgptta.png"  alt="SGP-TTA on STARE">
+        </img-comparison-slider>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================ Quantitative Results (placeholder) ===== -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Quantitative Results</h2>
+    <p class="has-text-centered has-text-grey mb-4">
+      Dice (%) and clDice (%) on three target domains, averaged over
+      images. Higher is better.
+    </p>
+
+    <!-- TODO: replace with your real numbers; keep clDice bolded if it is the headline metric -->
+    <div class="table-container">
+      <table class="table is-striped is-hoverable is-fullwidth has-text-centered">
+        <thead>
+          <tr>
+            <th>Target</th>
+            <th>Source-only</th>
+            <th>TENT</th>
+            <th>CoTTA</th>
+            <th>SGP-TTA (ours)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>DRIVE</td>  <td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td class="has-text-weight-bold">&mdash;</td></tr>
+          <tr><td>OCTA</td>   <td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td class="has-text-weight-bold">&mdash;</td></tr>
+          <tr><td>STARE</td>  <td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td class="has-text-weight-bold">&mdash;</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================ BibTeX ===== -->
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title is-3">BibTeX</h2>
+<pre><code>@article{sgptta2026,
+  title   = {Skeleton-Guided Progressive Test-Time Adaptation for Tubular-Structure Segmentation},
+  author  = {SGP-TTA authors},
+  year    = {2026}
+}</code></pre>
+  </div>
+</section>
+
+
+<!-- ============================================================ Footer ===== -->
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <p>
+        Website template adapted from
+        <a href="https://nerfies.github.io/">Nerfies</a>.
+        Source available on
+        <a href="https://github.com/">GitHub</a>.
+      </p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
