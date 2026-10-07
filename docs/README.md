@@ -5,7 +5,7 @@ loads from CDNs. Open `index.html` locally to preview.
 
 ```bash
 # from the repository root
-cd page
+cd docs
 python -m http.server 8000
 # then visit http://localhost:8000
 ```
@@ -13,7 +13,7 @@ python -m http.server 8000
 ## Layout
 
 ```
-page/
+docs/
 ├── index.html            # the whole page
 ├── static/
 │   ├── css/style.css     # minor overrides on top of Bulma
@@ -72,20 +72,23 @@ The site is pure static — any host works.
 
 ```bash
 # one-time (choose "Deploy from current directory"):
-cd page
+cd docs
 npx vercel
 
 # subsequent deploys:
 npx vercel --prod
 ```
 
-### GitHub Pages (same repo, `/page` folder)
+### GitHub Pages (same repo, `/docs` folder)
 
-Repository settings → Pages → Source: `main` branch, `/page` folder.
+Repository settings → Pages → Source: `Deploy from a branch` →
+Branch: `main`, Folder: `/docs`. The `/docs` folder name is one of only
+two options GitHub Pages accepts for "Deploy from a branch" (the other
+is repo root).
 
 ### GitHub Pages (separate `username.github.io/sgptta` repo)
 
-Copy the contents of `page/` into a new repo named `sgptta` and enable
+Copy the contents of `docs/` into a new repo named `sgptta` and enable
 Pages on that repo (`main` branch, root folder).
 
 ## Local dev tips
