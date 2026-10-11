@@ -13,7 +13,7 @@ aerial imagery, and similar. It adapts a source-domain model to each
 incoming target-domain image without any labels and without touching
 the training pipeline.
 
-**Project page:** https://boa-jang.github.io/SGPTTA/
+**Project page:** https://boa-jang.github.io/SGP-TTA/
 
 ## Method
 
